@@ -48,14 +48,14 @@ class DeepQNetwork:
       l.parallelism = 'Disabled'
     self.model.initialize(self.input_shape[:-1], self.cost)
     if args.optimizer == 'rmsprop':
-      self.optimizer = RMSProp(learning_rate = args.learning_rate, 
-          decay_rate = args.decay_rate, 
+      self.optimizer = RMSProp(learning_rate = args.learning_rate,
+          decay_rate = args.decay_rate,
           stochastic_round = args.stochastic_round)
     elif args.optimizer == 'adam':
-      self.optimizer = Adam(learning_rate = args.learning_rate, 
+      self.optimizer = Adam(learning_rate = args.learning_rate,
           stochastic_round = args.stochastic_round)
     elif args.optimizer == 'adadelta':
-      self.optimizer = Adadelta(decay = args.decay_rate, 
+      self.optimizer = Adadelta(decay = args.decay_rate,
           stochastic_round = args.stochastic_round)
     else:
       assert false, "Unknown optimizer"
@@ -124,6 +124,9 @@ class DeepQNetwork:
     maxpostq = self.be.max(postq, axis=0).asnumpyarray()
     assert maxpostq.shape == (1, self.batch_size)
 
+    # average maxpostq for stats
+    maxpostq_avg = maxpostq.mean()
+
     # feed-forward pass for prestates
     self._setInput(prestates)
     preq = self.model.fprop(self.input, inference = False)
@@ -163,6 +166,8 @@ class DeepQNetwork:
 
     # perform optimization
     self.optimizer.optimize(self.model.layers_to_optimize, epoch)
+
+    logger.info("Network update #%d: Cost = %s, Avg Max Q-value: %s" % (self.update_iterations, str(cost.asnumpyarray()[0][0]), str(maxpostq_avg)))
 
     # increase number of weight updates (needed for target clone interval)
     self.train_iterations += 1
