@@ -167,10 +167,10 @@ class DeepQNetwork:
     # perform optimization
     self.optimizer.optimize(self.model.layers_to_optimize, epoch)
 
-    logger.info("Network update #%d: Cost = %s, Avg Max Q-value: %s" % (self.train_iterations, str(cost.asnumpyarray()[0][0]), str(maxpostq_avg)))
-
     # increase number of weight updates (needed for target clone interval)
     self.train_iterations += 1
+
+    logger.info("Network update #%d: Cost = %s, Avg Max Q-value: %s" % (self.train_iterations, str(cost.asnumpyarray()[0][0]), str(maxpostq_avg)))
 
     # calculate statistics
     if self.callback:
