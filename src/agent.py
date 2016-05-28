@@ -100,7 +100,7 @@ class Agent:
       if self.mem.count > self.mem.batch_size and i % self.train_frequency == 0:
         # train for train_repeat times
         for j in xrange(self.train_repeat):
-          logger.info("i=%d, j=%d, mem.count=%d" % (i, j, self.mem.count))
+          #logger.info("i=%d, j=%d, mem.count=%d" % (i, j, self.mem.count))
           # sample minibatch
           minibatch = self.mem.getMinibatch()
           # train the network
