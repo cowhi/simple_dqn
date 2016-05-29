@@ -76,7 +76,7 @@ mainarg.add_argument("--start_epoch", type=int, default=0, help="Start from this
 mainarg.add_argument("--play_games", type=int, default=0, help="How many games to play, suppresses training and testing.")
 mainarg.add_argument("--load_weights", help="Load network from file.")
 mainarg.add_argument("--save_weights_prefix", help="Save network to given file. Epoch and extension will be appended.")
-mainarg.add_argument("--csv_file", help="Write training progress to this file.")
+mainarg.add_argument("--csv_file", default="stats_train.csv" help="Write training progress to this file.")
 
 comarg = parser.add_argument_group('Common')
 comarg.add_argument("--random_seed", type=int, help="Random seed for repeatable experiments.")
@@ -85,6 +85,8 @@ args = parser.parse_args()
 
 logger = logging.getLogger()
 logger.setLevel(args.log_level)
+
+logger.debug("%s" % str(args))
 
 if args.random_seed:
   random.seed(args.random_seed)
